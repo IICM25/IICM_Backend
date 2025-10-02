@@ -1,9 +1,5 @@
 const nodemailer = require('nodemailer');
 
-console.log("--- CHECKING CREDENTIALS ---");
-console.log("Email User Loaded:", process.env.EMAIL_USER);
-console.log("Email Pass Loaded:", process.env.EMAIL_PASS ? 'Exists' : '!!! MISSING !!!');
-console.log("----------------------------");
 // Set up transporter
 const transporter = nodemailer.createTransport({
     service: 'gmail',

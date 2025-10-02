@@ -94,12 +94,10 @@ const approveStudent=async (req,res)=>{
         const formattedDate = istDate.toISOString().slice(0, 19).replace('T', ' ');
         const query = `UPDATE participants SET last_meal = '${formattedDate}' WHERE email = ?`;
         const query2 = `UPDATE ${hall} SET ${countMealTableColumnName} = ${countMealTableColumnName}+1 WHERE id = '${countMealTableRowId}'`;
-
-        // const query2 = `UPDATE mealCount SET ${countMealTableColumnName} = ${countMealTableColumnName}+1 WHERE id = '${countMealTableRowId}'`;
         const [rows] = await db.execute(query, [email]);
-        // if(countMealTableRowId<4){
+
         const [rows2] = await db.execute(query2);
-        // }
+
         if(rows.length==0) res.status(404).json({message : 'No record found'})
         else {
             res.status(200).json({message : 'Approved'})
