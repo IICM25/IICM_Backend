@@ -10,7 +10,7 @@ CREATE TABLE participants (
     hall_name INT,
     last_meal DATETIME,
     uniqueCode VARCHAR(8),
-    rollNo VARCHAR(50),
+    rollNo VARCHAR(50)
 );
 
 CREATE TABLE mess_users (
@@ -48,4 +48,15 @@ CREATE TABLE hall3 (
     day_23 INT DEFAULT 0,
     day_24 INT DEFAULT 0,
     day_25 INT DEFAULT 0
+);
+
+CREATE TABLE events (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  description TEXT,
+  date DATE NOT NULL,
+  start_time TIME NOT NULL,
+  end_time TIME,
+  venue VARCHAR(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
