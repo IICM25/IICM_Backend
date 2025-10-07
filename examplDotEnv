@@ -1,0 +1,5 @@
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=abc
+DB_PASS=***************
+DB_NAME=inter_iit_cult_meet_2025
