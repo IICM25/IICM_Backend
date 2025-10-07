@@ -1,4 +1,6 @@
-USE inter_iit_cult;
+-- USE inter_iit_cult;
+
+USE inter_iit_cult_meet_2025;
 
 CREATE TABLE participants (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
