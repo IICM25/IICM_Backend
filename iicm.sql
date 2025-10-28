@@ -1,7 +1,5 @@
 -- USE inter_iit_cult;
 
-USE inter_iit_cult_meet_2025;
-
 CREATE TABLE participants (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -12,7 +10,8 @@ CREATE TABLE participants (
     hall_name INT,
     last_meal DATETIME,
     uniqueCode VARCHAR(8),
-    rollNo VARCHAR(50)
+    rollNo VARCHAR(50),
+    image VARCHAR(255)
 );
 
 CREATE TABLE mess_users (
@@ -30,26 +29,10 @@ CREATE TABLE admins (
 
 CREATE TABLE hall3 (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    day_6 INT DEFAULT 0,
-    day_7 INT DEFAULT 0,
-    day_8 INT DEFAULT 0,
-    day_9 INT DEFAULT 0,
-    day_10 INT DEFAULT 0,
-    day_11 INT DEFAULT 0,
-    day_12 INT DEFAULT 0,
-    day_13 INT DEFAULT 0,
-    day_14 INT DEFAULT 0,
-    day_15 INT DEFAULT 0,
-    day_16 INT DEFAULT 0,
-    day_17 INT DEFAULT 0,
-    day_18 INT DEFAULT 0,
-    day_19 INT DEFAULT 0,
-    day_20 INT DEFAULT 0,
-    day_21 INT DEFAULT 0,
-    day_22 INT DEFAULT 0,
-    day_23 INT DEFAULT 0,
-    day_24 INT DEFAULT 0,
-    day_25 INT DEFAULT 0
+    day_27 INT DEFAULT 0,
+    day_28 INT DEFAULT 0,
+    day_29 INT DEFAULT 0,
+    day_30 INT DEFAULT 0
 );
 
 CREATE TABLE events (
