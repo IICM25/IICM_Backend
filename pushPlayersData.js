@@ -34,7 +34,10 @@ const connection = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
-    database: process.env.DB_NAME
+    database: process.env.DB_NAME,
+    ssl: {
+    rejectUnauthorized: false 
+  }
 });
 
 // Connect to MySQL database
@@ -52,7 +55,7 @@ const filePath = path.join(__dirname, 'student.xlsx');
 const workbook = xlsx.readFile(filePath);
 
 // // Select the first sheet
-// connection.query('TRUNCATE TABLE players');
+connection.query('TRUNCATE TABLE participants');
 // for(let i=0; i<23; i++){
     const sheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[sheetName];
