@@ -119,13 +119,12 @@ const loginMessUser = async (req, res) => {
         if (results.length === 0) {return res.status(400).send('User not found');}
         console.log(results);
         const hashedPassword = results[0][0].password;
-        const isMatch = await bcrypt.compare(password, hashedPassword);
-        if (isMatch) {
-            const token = jwt.sign({ email: email }, secretKey);
-            res.send({ message: 'Login successful', token: token });
-        } else {
-            res.status(400).send('Incorrect password');
-        }
+        if (password === hashedPassword) {
+    const token = jwt.sign({ email: email }, secretKey);
+    res.send({ message: 'Login successful', token: token });
+} else {
+    res.status(400).send('Incorrect password');
+}
     }catch(e){
         console.log(e);
         res.status(500).send('Error logging in');

@@ -54,7 +54,21 @@ app.use((err, req, res, next) => {
   console.error('Error:', err.message);
   res.status(500).json({ error: 'Internal Server Error' });
 });
+const db = require('./config/db');
+
+const checkDbConnection = async () => {
+  try {
+    const [rows] = await db.query('SELECT NOW() AS currentTime');
+    console.log('✅ Database connected successfully! Current time:', rows[0].currentTime);
+  } catch (error) {
+    console.error('❌ Database connection failed:', error.message);
+  }
+};
+
+checkDbConnection();
 
 // Start server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {});
+app.listen(PORT,'0.0.0.0' , () => {console.log(`Server is running on port ${process.env.PORT || 3000}`);});
+
+

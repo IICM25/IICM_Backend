@@ -1,4 +1,8 @@
 node_modules/
+
+iism2024-firebase-adminsdk-y0sbb-d1d4eb81db.json
+iism2024-firebase-adminsdk-y0sbb-8af6da6133.json
+*.xlsx.vscode/
 .env
 .vscode/
 firebase-credentials.json
