@@ -15,13 +15,14 @@ const getData=async (req,res)=>{
         if(rows.length==0) res.status(404).json({message : 'No record found'})
         else {
             
-            const breakfastTimeStampStart = getTodayAtTime(7).getTime();
-            const breakfastTimeStampEnd = getTodayAtTime(10).getTime();
-            const lunchTimeStampStart = getTodayAtTime(12).getTime();
-            const lunchTimeStampEnd = getTodayAtTime(15).getTime();
-            const dinnerTimeStampStart = getTodayAtTime(19).getTime();
-            const dinnerTimeStampEnd = getTodayAtTime(22).getTime();
-            const currentTimeStamp = Date.now();
+            const breakfastTimeStampStart = getTodayAtTimeIST(7).getTime();
+            const breakfastTimeStampEnd = getTodayAtTimeIST(10).getTime();
+            const lunchTimeStampStart = getTodayAtTimeIST(12).getTime();
+            const lunchTimeStampEnd = getTodayAtTimeIST(15).getTime();
+            const dinnerTimeStampStart = getTodayAtTimeIST(19).getTime();
+            const dinnerTimeStampEnd = getTodayAtTimeIST(22).getTime();
+            const nowIST = getNowIST();
+            const currentTimeStamp = nowIST.getTime();
             const mealType = (currentTimeStamp >= breakfastTimeStampStart && currentTimeStamp <= breakfastTimeStampEnd) ? 'breakfast' : (currentTimeStamp >= lunchTimeStampStart && currentTimeStamp <= lunchTimeStampEnd) ? 'lunch' : (currentTimeStamp >= dinnerTimeStampStart && currentTimeStamp <= dinnerTimeStampEnd) ? 'dinner' : 'nothing';
             if(rows[0].last_meal==null){
                 res.status(200).json({data : rows[0], isValidStudent : true, mealType : mealType})
@@ -56,17 +57,29 @@ const getData=async (req,res)=>{
     }
 }
 
-function getTodayAtTime(hours, minutes=0, seconds = 0) {
-    const now = new Date();
-    return new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      hours,
-      minutes,
-      seconds
-    );
-  }
+// function getTodayAtTime(hours, minutes=0, seconds = 0) {
+//     const now = new Date();
+//     return new Date(
+//       now.getFullYear(),
+//       now.getMonth(),
+//       now.getDate(),
+//       hours,
+//       minutes,
+//       seconds
+//     );
+//   }
+
+function getTodayAtTimeIST(hours, minutes = 0, seconds = 0) {
+  const nowIST = getNowIST();
+  return new Date(
+    nowIST.getFullYear(),
+    nowIST.getMonth(),
+    nowIST.getDate(),
+    hours,
+    minutes,
+    seconds
+  );
+}
 
 const approveStudent=async (req,res)=>{
     const email= req.body.email;
@@ -74,24 +87,27 @@ const approveStudent=async (req,res)=>{
     console.log(email)
     console.log(hall)
     try{
-        const currentDate = new Date();
-        const breakfastTimeStampStart = getTodayAtTime(7).getTime();
-        const breakfastTimeStampEnd = getTodayAtTime(10).getTime();
-        const lunchTimeStampStart = getTodayAtTime(12).getTime();
-        const lunchTimeStampEnd = getTodayAtTime(15).getTime();
-        const dinnerTimeStampStart = getTodayAtTime(19).getTime();
-        const dinnerTimeStampEnd = getTodayAtTime(22).getTime();
-        const currentTimeStamp = Date.now();
+        const nowIST = getNowIST();
+        // const currentDate = new Date();
+        const breakfastTimeStampStart = getTodayAtTimeIST(7).getTime();
+        const breakfastTimeStampEnd = getTodayAtTimeIST(10).getTime();
+        const lunchTimeStampStart = getTodayAtTimeIST(12).getTime();
+        const lunchTimeStampEnd = getTodayAtTimeIST(15).getTime();
+        const dinnerTimeStampStart = getTodayAtTimeIST(19).getTime();
+        const dinnerTimeStampEnd = getTodayAtTimeIST(22).getTime();
+        const currentTimeStamp = nowIST.getTime();
         const countMealTableRowId = (currentTimeStamp >= breakfastTimeStampStart && currentTimeStamp <= breakfastTimeStampEnd) ? 1 : (currentTimeStamp >= lunchTimeStampStart && currentTimeStamp <= lunchTimeStampEnd) ? 2 : (currentTimeStamp >= dinnerTimeStampStart && currentTimeStamp <= dinnerTimeStampEnd) ? 3 : 4;
-        const day = currentDate.getDate();
+        const day = nowIST.getDate();
         const countMealTableColumnName = "day_" + day;
         // Adjust to IST (UTC+5:30)
-        const offset = 5.5 * 60 * 60 * 1000; // IST is 5 hours 30 minutes ahead of UTC
-        const istDate = new Date(currentDate.getTime() + offset);
+        // const offset = 5.5 * 60 * 60 * 1000; // IST is 5 hours 30 minutes ahead of UTC
+        // const istDate = new Date(currentDate.getTime() + offset);
 
 
         // Format the IST date to 'YYYY-MM-DD HH:MM:SS'
-        const formattedDate = istDate.toISOString().slice(0, 19).replace('T', ' ');
+        // const formattedDate = istDate.toISOString().slice(0, 19).replace('T', ' ');
+        
+        const formattedDate = nowIST.toISOString().slice(0, 19).replace('T', ' ');
         const query = `UPDATE participants SET last_meal = '${formattedDate}' WHERE email = ?`;
         const query2 = `UPDATE ${hall} SET ${countMealTableColumnName} = ${countMealTableColumnName}+1 WHERE id = '${countMealTableRowId}'`;
         const [rows] = await db.execute(query, [email]);
@@ -101,6 +117,7 @@ const approveStudent=async (req,res)=>{
         if(rows.length==0) res.status(404).json({message : 'No record found'})
         else {
             res.status(200).json({message : 'Approved'})
+            console.log(rows);
         }
     } catch(e){
         console.log(e)
@@ -137,8 +154,9 @@ const getMealCount = async (req,res)=>{
     // const hall= req.body.hall;
     console.log(hall)
     try{
-        const currentDate = new Date();
-        const day = currentDate.getDate();
+        // const currentDate = new Date();
+        const nowIST= getNowIST();
+        const day = nowIST.getDate();
         const countMealTableColumnName = "day_" + day;
         const _hall = mysql.escapeId(hall);
         const query = `SELECT ${countMealTableColumnName} FROM ${hall}`;
@@ -156,6 +174,12 @@ const getMealCount = async (req,res)=>{
     }
 }
 
+
+function getNowIST() {
+  const nowUTC = Date.now();
+  const offset = 5.5 * 60 * 60 * 1000;
+  return new Date(nowUTC + offset);
+}
 
 
 module.exports = {getData,approveStudent, loginMessUser, getMealCount};

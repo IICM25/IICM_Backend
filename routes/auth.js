@@ -48,6 +48,7 @@ router.post('/register', async (req, res) => {
                         uniqueCode: rows[0].uniqueCode,
                         rollNo: rows[0].rollNo,
                         type: rows[0].type,
+                        image: rows[0].image,
                         id_generation: qrUrl
                     }
                     res.status(200).json({ message: 'OTP verified', participant: data});
